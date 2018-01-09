@@ -6,6 +6,10 @@ Auto Mouse Mover Software Utility allows you to move the mouse automatically whi
 this software is implemented by java and can be used by command line or by swing application, it is up to the user to choose
 the preferred interface 
   
+the automouse move the mouse in a loop +1px north/east and -1px south/west in the way to put keep the pointer to the same position  
+the time when each iteration is performed can be configured 
+ 
+
 
 ### How to build
 
