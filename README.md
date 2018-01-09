@@ -1,4 +1,29 @@
-## Welcome to GitHub Pages
+
+## Welcome to AutoMouse
+
+Auto Mouse Mover Software Utility allows you to move the mouse automatically which prevents your computer from logging off.
+
+this software is implemented by java and can be used by command line or by swing application, it is up to the user to choose
+the preferred interface 
+  
+
+### How to build
+
+when downloaded the software, in the main folder  **automouse** run the bat file compile.bat
+then in the maven target folder will be created a zip file  **automouse.zip**
+
+unzip the file when you want to have the software ready to start
+
+### How to start
+
+when unzipped the **automouse.zip** it will contain two scripts
+
+ - startConsole.bat  to run the software in a shell
+ - startSwing.bat    to run the software in a swing application
+
+
+### github page Markdown
+
 
 You can use the [editor on GitHub](https://github.com/alesky78/AutoMouse/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
