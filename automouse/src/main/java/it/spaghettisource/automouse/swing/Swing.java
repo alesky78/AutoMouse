@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -39,12 +40,14 @@ public class Swing extends JPanel implements ChangeListener,ActionListener{
 	public Swing(DataBug dataBug){
 
 		this.dataBug = dataBug;
-
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-		//Create the label.
-		JLabel sliderLabel = new JLabel("sleep time interval", JLabel.CENTER);
-		sliderLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		//////////////////////////////////////////////
+		//Create The iteration of the agent slider
+		//////////////////////////////////////////////	
+		JPanel sliderPanel = new JPanel();		
+		sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.PAGE_AXIS));		
+		sliderPanel.setBorder(BorderFactory.createTitledBorder("agent sleep time interval"));		
 
 		//Create the slider.
 		JSlider slider = new JSlider(JSlider.HORIZONTAL,Configuration.getMinSleepTime()/TIME_CONVERTER, Configuration.getMaxSleepTime()/TIME_CONVERTER, Configuration.getDefaultSleepTime()/TIME_CONVERTER);
@@ -60,11 +63,19 @@ public class Swing extends JPanel implements ChangeListener,ActionListener{
 		sleepTimeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		sleepTimeLabel.setText(Integer.toString(Configuration.getDefaultSleepTime()/TIME_CONVERTER) + " seconds");
 
-		//Create The play and pause button
-		JPanel buttonPanel = new JPanel();
+
+		sliderPanel.add(slider);
+		sliderPanel.add(sleepTimeLabel);
+		
+		
+		//////////////////////////////////////////////
+		//Create The play and pause agent button panel
+		//////////////////////////////////////////////		
+		JPanel buttonPanel = new JPanel();		
 		buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		buttonPanel.setBorder(BorderFactory.createTitledBorder("manage agent"));
 
-
+		
 		pause = new JButton(ImageIconFactory.getForButton("/stop.png"));			
 		pause.setActionCommand(PAUSE);
 		pause.addActionListener(this);
@@ -85,12 +96,10 @@ public class Swing extends JPanel implements ChangeListener,ActionListener{
 		buttonPanel.add(play);
 
 
-
-		//Put everything together.
-		add(sliderLabel);
-		add(slider);
-		add(sleepTimeLabel);
-		add(new JSeparator());
+		//////////////////////////////////////////////
+		//Put all the panel togheter
+		//////////////////////////////////////////////	
+		add(sliderPanel);		
 		add(buttonPanel);
 
 		setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
