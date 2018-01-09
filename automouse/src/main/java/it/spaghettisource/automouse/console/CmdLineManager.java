@@ -84,22 +84,16 @@ public class CmdLineManager {
 
 		writeLine("do you want to proceed? please type (y/n)");
 		String response = readLine();
-		if(response.equals("y")){
-			return true;
-		}
+		return response.equals("y");
 
-		return false;
 	}
 
 	public boolean requestConfirmation(String extraMessage){
 
 		writeLine("do you want to proceed? "+extraMessage+", please type (y/n)");
 		String response = readLine();
-		if(response.equals("y")){
-			return true;
-		}
+		return response.equals("y");
 
-		return false;
 	}
 
 	public void setPrompt(String prompt) {

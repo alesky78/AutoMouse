@@ -5,9 +5,9 @@ import it.spaghettisource.automouse.utils.Configuration;
 
 public class Console implements Runnable {
 
-	private int PAUSE_MANAGEMENT = 0;
-	private int STOP_MANAGEMENT = 1;
-	private int TIME_MANAGEMENT = 2;
+	private static final int PAUSE_MANAGEMENT = 0;
+	private static final int STOP_MANAGEMENT = 1;
+	private static final int TIME_MANAGEMENT = 2;
 
 	private int selection = -1;
 
@@ -47,9 +47,9 @@ public class Console implements Runnable {
 
 	private void writeMenu(){
 		cl.writeLine("");
-		cl.writeLine("0 --> pause management");
-		cl.writeLine("1 --> stop  management");
-		cl.writeLine("2 --> time  management");
+		cl.writeLine(PAUSE_MANAGEMENT+" --> pause management");
+		cl.writeLine(STOP_MANAGEMENT+" --> stop  management");
+		cl.writeLine(TIME_MANAGEMENT+" --> time  management");
 	}
 
 	private boolean readMenuSelection(){

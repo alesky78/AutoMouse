@@ -1,7 +1,6 @@
 package it.spaghettisource.automouse.swing;
 
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,7 +18,7 @@ import it.spaghettisource.automouse.utils.Configuration;
 import it.spaghettisource.automouse.utils.ImageIconFactory;
 
 
-public class Swing extends JPanel implements ChangeListener,ActionListener{
+public class Swing extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = 5335453468072382991L;
 
@@ -37,9 +36,9 @@ public class Swing extends JPanel implements ChangeListener,ActionListener{
 	JButton pauseButton;
 	JButton playButton;
 
-	public Swing(DataBug dataBug){
+	public Swing(DataBug dataBugInput){
 
-		this.dataBug = dataBug;
+		this.dataBug = dataBugInput;
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
 		//////////////////////////////////////////////
@@ -51,13 +50,20 @@ public class Swing extends JPanel implements ChangeListener,ActionListener{
 
 		//Create the slider.
 		JSlider slider = new JSlider(JSlider.HORIZONTAL,Configuration.getMinSleepTime()/TIME_CONVERTER, Configuration.getMaxSleepTime()/TIME_CONVERTER, Configuration.getDefaultSleepTime()/TIME_CONVERTER);
-		slider.addChangeListener(this);
+		slider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				JSlider source = (JSlider)e.getSource();
+				if (!source.getValueIsAdjusting()) {
+					int sleepTime = source.getValue();
+					sleepTimeLabel.setText(sleepTime +  " seconds ");
+					dataBug.setSleepTimeMilliseconds(sleepTime*TIME_CONVERTER);
+				}
+			}
+		});
 
 		slider.setBorder(BorderFactory.createEmptyBorder(0,0,10,0));
-		Font font = new Font("Serif", Font.ITALIC, 15);
-		slider.setFont(font);
 
-		//Create the label that displays the sleeptime.
+		//Create the label that displays the sleep time.
 		sleepTimeLabel = new JLabel();
 		sleepTimeLabel.setHorizontalAlignment(JLabel.CENTER);
 		sleepTimeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -106,16 +112,6 @@ public class Swing extends JPanel implements ChangeListener,ActionListener{
 
 	}
 
-
-	public void stateChanged(ChangeEvent e) {
-		JSlider source = (JSlider)e.getSource();
-		if (!source.getValueIsAdjusting()) {
-			int sleepTime = source.getValue();
-			sleepTimeLabel.setText(sleepTime +  " seconds ");
-			dataBug.setSleepTimeMilliseconds(sleepTime*TIME_CONVERTER);
-		}
-
-	}
 
 	public void actionPerformed(ActionEvent evt) {
 		if (evt.getActionCommand() == PLAY) {
