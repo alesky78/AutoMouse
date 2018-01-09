@@ -33,14 +33,16 @@ public class Agent implements Runnable {
 
 			int x = 0;
 			int y = 0;
+			int pixelToMove = 0;
 			Point mouseLocation;
 
 			while(!dataBug.isStop()){
 				if(!dataBug.isPause()){
 					mouseLocation = MouseInfo.getPointerInfo().getLocation();
+					pixelToMove = dataBug.getPixelToMove();
 
-					x = flag? mouseLocation.x+1 : mouseLocation.x-1;
-					y = flag? mouseLocation.y+1 : mouseLocation.y-1;
+					x = flag? mouseLocation.x+pixelToMove : mouseLocation.x-pixelToMove;
+					y = flag? mouseLocation.y+pixelToMove : mouseLocation.y-pixelToMove;
 
 					flag = !flag;
 

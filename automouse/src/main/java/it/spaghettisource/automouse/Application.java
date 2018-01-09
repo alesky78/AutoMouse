@@ -28,7 +28,7 @@ public class Application {
 	
 		//configure the application
     	Configuration.init();
-		dataBug = new DataBug(Configuration.getDefaultSleepTime());
+		dataBug = new DataBug(Configuration.getDefaultSleepTime(), Configuration.getDefaultPixelMove());
 		
 		//prepare the agent
 		Agent automa = new Agent(dataBug);
@@ -45,7 +45,7 @@ public class Application {
 		if(args[0].equals("console") ){
 			
 			log.info("start by console");		
-			StartCommandLine(dataBug);
+			startCommandLine(dataBug);
 			
 		} 
 		
@@ -73,7 +73,7 @@ public class Application {
 	}
 	
 	
-	private static void StartCommandLine(DataBug dataBug){
+	private static void startCommandLine(DataBug dataBug){
 		//start the console
 		Console console = new Console(dataBug);
 		Thread thc = new Thread(console);

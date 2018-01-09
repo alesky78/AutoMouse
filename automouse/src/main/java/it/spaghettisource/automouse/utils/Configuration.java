@@ -10,14 +10,21 @@ public class Configuration {
 
 	static Log log = LogFactory.getLog(Configuration.class.getName());
 		
-	private final static String CONFIG_FILE_NAME = "/config.properties";
-	private static Properties prop = new Properties();
+	private static final String CONFIG_FILE_NAME = "/config.properties";
 
 	//keys list
-	private final static String MIN_SLEEP_TIME = "agent.slepptime.min";
-	private final static String MAX_SLEEP_TIME = "agent.slepptime.max";
-	private final static String DEFAULT_SLEEP_TIME = "agent.slepptime.default";
-		
+	private static final String MIN_SLEEP_TIME = "agent.slepptime.min";
+	private static final String MAX_SLEEP_TIME = "agent.slepptime.max";
+	private static final String DEFAULT_SLEEP_TIME = "agent.slepptime.default";
+	private static final String MIN_PIXEL_MOVE = "agent.pixel.min";	
+	private static final String MAX_PIXEL_MOVE = "agent.pixel.max";
+	private static final String DEFAULT_PIXEL_MOVE = "agent.pixel.default";	
+
+	private static Properties prop = new Properties();
+	
+	private Configuration(){
+	}
+	
 	public static void init(){
 		prop = new Properties();
 		try {
@@ -40,6 +47,18 @@ public class Configuration {
 	public static int getMinSleepTime(){
 		return getIntValue(MIN_SLEEP_TIME);
 	}
+
+	public static int getDefaultPixelMove(){
+		return getIntValue(DEFAULT_PIXEL_MOVE);
+	}
+
+	public static int getMaxPixelMove(){
+		return getIntValue(MAX_PIXEL_MOVE);
+	}
+	
+	public static int getMinPixelMove(){
+		return getIntValue(MIN_PIXEL_MOVE);
+	}	
 	
 	private static int getIntValue(String key){
 		return Integer.valueOf(prop.getProperty(key));

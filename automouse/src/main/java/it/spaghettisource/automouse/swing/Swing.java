@@ -29,8 +29,9 @@ public class Swing extends JPanel implements ActionListener{
 	private static final String PLAY = "PLAY";
 	private static final String PAUSE = "PAUSE";
 
-	//This label show the actual configured sleep time
+	//This label configured the agent time
 	JLabel sleepTimeLabel;
+	JLabel mouseMoveLabel;	
 
 	//this button control the pause and the play of the sleep thread
 	JButton pauseButton;
@@ -44,9 +45,9 @@ public class Swing extends JPanel implements ActionListener{
 		//////////////////////////////////////////////
 		//Create The iteration of the agent slider
 		//////////////////////////////////////////////	
-		JPanel sliderPanel = new JPanel();		
-		sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.PAGE_AXIS));		
-		sliderPanel.setBorder(BorderFactory.createTitledBorder("agent sleep time interval"));		
+		JPanel sleepTimePanel = new JPanel();		
+		sleepTimePanel.setLayout(new BoxLayout(sleepTimePanel, BoxLayout.PAGE_AXIS));		
+		sleepTimePanel.setBorder(BorderFactory.createTitledBorder("agent sleep time interval"));		
 
 		//Create the slider.
 		JSlider slider = new JSlider(JSlider.HORIZONTAL,Configuration.getMinSleepTime()/TIME_CONVERTER, Configuration.getMaxSleepTime()/TIME_CONVERTER, Configuration.getDefaultSleepTime()/TIME_CONVERTER);
@@ -67,13 +68,46 @@ public class Swing extends JPanel implements ActionListener{
 		sleepTimeLabel = new JLabel();
 		sleepTimeLabel.setHorizontalAlignment(JLabel.CENTER);
 		sleepTimeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		sleepTimeLabel.setText(Integer.toString(Configuration.getDefaultSleepTime()/TIME_CONVERTER) + " seconds");
+		sleepTimeLabel.setText(dataBug.getSleepTimeSeconds() + " seconds");
 
 
-		sliderPanel.add(slider);
-		sliderPanel.add(sleepTimeLabel);
-		
-		
+		sleepTimePanel.add(slider);
+		sleepTimePanel.add(sleepTimeLabel);
+
+
+		//////////////////////////////////////////////
+		//Create The configuration of the mouse move
+		//////////////////////////////////////////////	
+		JPanel mouseMovePanel = new JPanel();		
+		mouseMovePanel.setLayout(new BoxLayout(mouseMovePanel, BoxLayout.PAGE_AXIS));		
+		mouseMovePanel.setBorder(BorderFactory.createTitledBorder("number of pixel to move"));		
+
+		//Create the slider.
+		JSlider mouseMoveSlider = new JSlider(JSlider.HORIZONTAL,Configuration.getMinPixelMove(), Configuration.getMaxPixelMove(), Configuration.getDefaultPixelMove());
+		mouseMoveSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				JSlider source = (JSlider)e.getSource();
+				if (!source.getValueIsAdjusting()) {
+					int pixelToMove = source.getValue();
+					mouseMoveLabel.setText(pixelToMove +  " pixel ");
+					dataBug.setPixelToMove(pixelToMove);
+				}
+			}
+		});
+
+		mouseMoveSlider.setBorder(BorderFactory.createEmptyBorder(0,0,10,0));
+
+		//Create the label that displays the pixel to move time.
+		mouseMoveLabel = new JLabel();
+		mouseMoveLabel.setHorizontalAlignment(JLabel.CENTER);
+		mouseMoveLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		mouseMoveLabel.setText(dataBug.getPixelToMove() + " pixel");
+
+
+		mouseMovePanel.add(mouseMoveSlider);
+		mouseMovePanel.add(mouseMoveLabel);		
+
+
 		//////////////////////////////////////////////
 		//Create The play and pause agent button panel
 		//////////////////////////////////////////////		
@@ -81,7 +115,7 @@ public class Swing extends JPanel implements ActionListener{
 		buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		buttonPanel.setBorder(BorderFactory.createTitledBorder("manage agent"));
 
-		
+
 		pauseButton = new JButton(ImageIconFactory.getForButton("/stop.png"));			
 		pauseButton.setActionCommand(PAUSE);
 		pauseButton.addActionListener(this);
@@ -105,7 +139,8 @@ public class Swing extends JPanel implements ActionListener{
 		//////////////////////////////////////////////
 		//Put all the panel togheter
 		//////////////////////////////////////////////	
-		add(sliderPanel);		
+		add(sleepTimePanel);
+		add(mouseMovePanel);				
 		add(buttonPanel);
 
 		setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
