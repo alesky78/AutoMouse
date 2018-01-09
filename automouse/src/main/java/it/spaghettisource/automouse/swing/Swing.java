@@ -10,9 +10,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.JSlider;
-import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -20,22 +18,24 @@ import it.spaghettisource.automouse.agent.DataBug;
 import it.spaghettisource.automouse.utils.Configuration;
 import it.spaghettisource.automouse.utils.ImageIconFactory;
 
+
 public class Swing extends JPanel implements ChangeListener,ActionListener{
+
+	private static final long serialVersionUID = 5335453468072382991L;
 
 	private DataBug dataBug;
 
 	//DataBug works in millisecond, this constant help the conversion to milliseconds in seconds
-	private final static int TIME_CONVERTER = 1000;
-
-	private final static String PLAY = "PLAY";
-	private final static String PAUSE = "PAUSE";
+	private static final int TIME_CONVERTER = 1000;
+	private static final String PLAY = "PLAY";
+	private static final String PAUSE = "PAUSE";
 
 	//This label show the actual configured sleep time
 	JLabel sleepTimeLabel;
 
 	//this button control the pause and the play of the sleep thread
-	JButton pause,play;
-
+	JButton pauseButton;
+	JButton playButton;
 
 	public Swing(DataBug dataBug){
 
@@ -76,24 +76,24 @@ public class Swing extends JPanel implements ChangeListener,ActionListener{
 		buttonPanel.setBorder(BorderFactory.createTitledBorder("manage agent"));
 
 		
-		pause = new JButton(ImageIconFactory.getForButton("/stop.png"));			
-		pause.setActionCommand(PAUSE);
-		pause.addActionListener(this);
-		pause.setEnabled(!dataBug.isPause());
+		pauseButton = new JButton(ImageIconFactory.getForButton("/stop.png"));			
+		pauseButton.setActionCommand(PAUSE);
+		pauseButton.addActionListener(this);
+		pauseButton.setEnabled(!dataBug.isPause());
 
-		play = new JButton(ImageIconFactory.getForButton("/play.png"));			
-		play.setActionCommand(PLAY);
-		play.addActionListener(this);
-		play.setEnabled(dataBug.isPause());
+		playButton = new JButton(ImageIconFactory.getForButton("/play.png"));			
+		playButton.setActionCommand(PLAY);
+		playButton.addActionListener(this);
+		playButton.setEnabled(dataBug.isPause());
 
 
 		//pause.setBorder(BorderFactory.createEmptyBorder());
-		pause.setContentAreaFilled(false);
+		pauseButton.setContentAreaFilled(false);
 		//play.setBorder(BorderFactory.createEmptyBorder());
-		play.setContentAreaFilled(false);
+		playButton.setContentAreaFilled(false);
 
-		buttonPanel.add(pause);
-		buttonPanel.add(play);
+		buttonPanel.add(pauseButton);
+		buttonPanel.add(playButton);
 
 
 		//////////////////////////////////////////////
@@ -110,7 +110,7 @@ public class Swing extends JPanel implements ChangeListener,ActionListener{
 	public void stateChanged(ChangeEvent e) {
 		JSlider source = (JSlider)e.getSource();
 		if (!source.getValueIsAdjusting()) {
-			int sleepTime = (int)source.getValue();
+			int sleepTime = source.getValue();
 			sleepTimeLabel.setText(sleepTime +  " seconds ");
 			dataBug.setSleepTimeMilliseconds(sleepTime*TIME_CONVERTER);
 		}
@@ -120,12 +120,12 @@ public class Swing extends JPanel implements ChangeListener,ActionListener{
 	public void actionPerformed(ActionEvent evt) {
 		if (evt.getActionCommand() == PLAY) {
 			dataBug.setPause(false);
-			play.setEnabled(false);
-			pause.setEnabled(true);
+			playButton.setEnabled(false);
+			pauseButton.setEnabled(true);
 		}else if (evt.getActionCommand() == PAUSE) {
 			dataBug.setPause(true);
-			play.setEnabled(true);
-			pause.setEnabled(false);
+			playButton.setEnabled(true);
+			pauseButton.setEnabled(false);
 		}
 
 

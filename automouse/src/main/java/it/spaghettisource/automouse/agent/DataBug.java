@@ -1,6 +1,10 @@
 package it.spaghettisource.automouse.agent;
 
-public class DataBug {
+import java.io.Serializable;
+
+public class DataBug implements Serializable{
+
+	private static final long serialVersionUID = -5927015819875117637L;
 
 	public DataBug(int defaultSleepTime) {
 		super();

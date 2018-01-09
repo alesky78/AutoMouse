@@ -2,7 +2,6 @@ package it.spaghettisource.automouse.utils;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -14,9 +13,8 @@ import org.apache.commons.logging.LogFactory;
 
 public class ImageIconFactory {
 
-	static Log log = LogFactory.getLog(ImageIconFactory.class.getName());
-
-	public final static int ICON_SIZE_BUTTON = 30;
+	private static Log log = LogFactory.getLog(ImageIconFactory.class.getName());
+	public  static final int ICON_SIZE_BUTTON = 30;
 
 	private ImageIconFactory(){
 	}
