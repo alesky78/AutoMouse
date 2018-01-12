@@ -3,13 +3,12 @@
 
 Auto Mouse Mover Software Utility allows you to move the mouse automatically which prevents your computer from logging off.
 
-this software is implemented by java and can be used by command line or by swing application, it is up to the user to choose
-the preferred interface 
+this software is implemented by java and can be used by command line or by swing application, it is up to the user to choose the preferred interface 
   
-the automouse move the mouse in a loop +1px north/east and -1px south/west in the way to keep the pointer to the same position  
-the time when each iteration is performed can be configured 
+the automouse allow the user to configure:
+ - the amount of pixel that the mouse must move
+ - the time when each mouse moveiteration is performed
  
-
 
 ### How to build
 
