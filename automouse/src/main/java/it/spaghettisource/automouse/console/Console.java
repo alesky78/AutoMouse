@@ -8,6 +8,7 @@ public class Console implements Runnable {
 	private static final int PAUSE_MANAGEMENT = 0;
 	private static final int STOP_MANAGEMENT = 1;
 	private static final int TIME_MANAGEMENT = 2;
+	private static final int MOVE_MANAGEMENT = 3;	
 
 	private int selection = -1;
 
@@ -50,6 +51,8 @@ public class Console implements Runnable {
 		cl.writeLine(PAUSE_MANAGEMENT+" --> pause management");
 		cl.writeLine(STOP_MANAGEMENT+" --> stop  management");
 		cl.writeLine(TIME_MANAGEMENT+" --> time  management");
+		cl.writeLine(MOVE_MANAGEMENT+" --> move  management");		
+		
 	}
 
 	private boolean readMenuSelection(){
@@ -78,16 +81,28 @@ public class Console implements Runnable {
 				cl.writeLine("set the timer of the automa in seconds [between "+Configuration.getMinSleepTime()/1000+"s and "+Configuration.getMaxSleepTime()/1000+"s]");
 				int time = Integer.parseInt(cl.readLine());
 				if(time < (Configuration.getMinSleepTime()/1000) || time > (Configuration.getMaxSleepTime()/1000)){
-					dataBug.setSleepTimeMilliseconds(Configuration.getDefaultSleepTime());
-					cl.writeLine("out of range, set default value");
+					cl.writeLine("out of range, values is not changed");
 				}else{
 					dataBug.setSleepTimeMilliseconds(time*1000); //set in milliseconds
 				}
 			} catch (Exception e) {
-				dataBug.setSleepTimeMilliseconds(Configuration.getDefaultSleepTime());
-				cl.writeLine("invalid selection, set default value");
+				cl.writeLine("invalid selection, values is not changed");
 			}
 		}
+		
+		if(selection == MOVE_MANAGEMENT){
+			try{
+				cl.writeLine("set the amount of pixel to move the cursor [between "+Configuration.getMinPixelMove()+" pixel and "+Configuration.getMaxPixelMove()+" pixel]");
+				int pixelToMove = Integer.parseInt(cl.readLine());
+				if(pixelToMove < Configuration.getMinPixelMove() || pixelToMove > Configuration.getMaxPixelMove()){
+					cl.writeLine("out of range, values is not changed");
+				}else{
+					dataBug.setPixelToMove(pixelToMove);
+				}
+			} catch (Exception e) {
+				cl.writeLine("invalid selection, values is not changed");
+			}
+		}		
 
 	}
 
