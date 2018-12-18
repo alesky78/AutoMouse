@@ -7,7 +7,7 @@ this software is implemented by java and can be used by command line or by swing
   
 the automouse allow the user to configure:
  - the amount of pixel that the mouse must move
- - the time when each mouse moveiteration is performed
+ - the time when each mouse move iteration is performed
  
 
 ### How to build
