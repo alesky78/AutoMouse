@@ -2,6 +2,7 @@ package it.spaghettisource.automouse.agent;
 
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.PointerInfo;
 import java.awt.Robot;
 import java.util.Date;
 
@@ -35,19 +36,28 @@ public class Agent implements Runnable {
 			int y = 0;
 			int pixelToMove = 0;
 			Point mouseLocation;
+			PointerInfo mousePointer;
 
 			while(!dataBug.isStop()){
 				if(!dataBug.isPause()){
-					mouseLocation = MouseInfo.getPointerInfo().getLocation();
-					pixelToMove = dataBug.getPixelToMove();
+					
+					mousePointer = MouseInfo.getPointerInfo();
+					
+					if(mousePointer!=null) {	//check the pointer because it is null in case of desktop not available or in lock mode
+						mouseLocation = mousePointer.getLocation();
+						pixelToMove = dataBug.getPixelToMove();
 
-					x = flag? mouseLocation.x+pixelToMove : mouseLocation.x-pixelToMove;
-					y = flag? mouseLocation.y+pixelToMove : mouseLocation.y-pixelToMove;
+						x = flag? mouseLocation.x+pixelToMove : mouseLocation.x-pixelToMove;
+						y = flag? mouseLocation.y+pixelToMove : mouseLocation.y-pixelToMove;
 
-					flag = !flag;
+						flag = !flag;
 
-					robot.mouseMove(x, y);
-					log.info("automa move mouse event x:"+x+" y:"+y+" time "+ new Date(System.currentTimeMillis()));
+						robot.mouseMove(x, y);
+						log.info("automa move mouse event x:"+x+" y:"+y+" time "+ new Date(System.currentTimeMillis()));						
+					}else {
+						log.info("mouse not available (not desktop loaded or pc in lock mode)"+ new Date(System.currentTimeMillis()));
+					}
+
 				}else{
 					log.info("automa is in pause mode");
 				}
