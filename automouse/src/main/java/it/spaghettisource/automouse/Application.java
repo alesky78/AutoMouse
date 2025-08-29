@@ -18,6 +18,12 @@ import it.spaghettisource.automouse.swing.Swing;
 import it.spaghettisource.automouse.utils.Configuration;
 import it.spaghettisource.automouse.utils.ImageIconFactory;
 
+/**
+ * Main class to start the application
+ * 
+ * @author alesky
+ *
+ */
 public class Application {
 
 	static Log log = LogFactory.getLog(Application.class.getName());
