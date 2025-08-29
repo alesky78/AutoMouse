@@ -11,6 +11,12 @@ import org.apache.commons.logging.LogFactory;
 
 import it.spaghettisource.automouse.console.CmdLineManager;
 
+/**
+ * Agent
+ * 
+ * @author alesky
+ *
+ */
 public class Agent implements Runnable {
 
 	static Log log = LogFactory.getLog(CmdLineManager.class.getName());
