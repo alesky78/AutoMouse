@@ -1,26 +1,27 @@
 
 ## Welcome to AutoMouse
 
-Auto Mouse Mover Software Utility allows you to move the mouse automatically which prevents your computer from logging off.
+AutoMouse keeps Windows sessions active by triggering configurable mouse movements. 
+Built in Java, it exposes both a console interface and a Swing UI so each user can choose 
+the workflow that fits their automation needs.
 
-this software is implemented by java and can be used by command line or by swing application. 
-It is up to the user to choose the preferred interface 
-  
-the automouse allow the user to configure:
- - the amount of pixel that the mouse must move
- - the time when each mouse move iteration is performed
+Core Features
+ - Adjustable movement distance to mimic natural cursor activity.
+ - Customizable interval between each simulated movement.
+ - Configurable auto-stop slots to pause and restart the automation on schedule.
+ - Dual launch scripts: one for headless console usage, one for the Swing application.
  
+### Build Instructions
 
-### How to build
+From the project root **automouse**, run compile.bat. 
+Maven produces **automouse.zip** inside target. 
 
-when downloaded the software, in the main folder  **automouse** run the bat file compile.bat
-then in the maven target folder will be created a zip file  **automouse.zip**
+Unzip it in any folder to obtain a ready-to-run distribution.
 
-unzip the file when you want to have the software ready to start
 
 ### How to start
 
-when unzipped the **automouse.zip** it will contain two scripts
+unzipped the **automouse.zip** it will contain two scripts
 
  - startConsole.bat  to run the software in a shell
  - startSwing.bat    to run the software in a swing application
