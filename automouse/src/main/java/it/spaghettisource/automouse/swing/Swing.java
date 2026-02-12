@@ -3,6 +3,11 @@ package it.spaghettisource.automouse.swing;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -10,12 +15,16 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.JOptionPane;
+import java.awt.FlowLayout;
 
 import it.spaghettisource.automouse.agent.DataBug;
 import it.spaghettisource.automouse.utils.Configuration;
 import it.spaghettisource.automouse.utils.ImageIconFactory;
+import it.spaghettisource.automouse.utils.TimeSlot;
 
 
 public class Swing extends JPanel implements ActionListener{
@@ -28,19 +37,62 @@ public class Swing extends JPanel implements ActionListener{
 	private static final int TIME_CONVERTER = 1000;
 	private static final String PLAY = "PLAY";
 	private static final String PAUSE = "PAUSE";
+	private static final String ADD_SLOT = "ADD_SLOT";
+	private static final String CLEAR_SLOTS = "CLEAR_SLOTS";
 
 	//This label configured the agent time
-	JLabel sleepTimeLabel;
-	JLabel mouseMoveLabel;	
+	private JLabel sleepTimeLabel;
+	private JLabel mouseMoveLabel;
 
 	//this button control the pause and the play of the sleep thread
-	JButton pauseButton;
-	JButton playButton;
+	private JButton pauseButton;
+	private JButton playButton;
+
+	// Multy-stop UI components
+	private JLabel autoStopLabel;
+	private JTextField startField;
+	private JTextField endField;
+	private JButton addSlotButton;
+	private JButton clearSlotsButton;
+	private JPanel autoStopPanel;
 
 	public Swing(DataBug dataBugInput){
 
 		this.dataBug = dataBugInput;
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+
+
+		//////////////////////////////////////////////
+		// --- Auto stop panel ---
+		//////////////////////////////////////////////
+		autoStopPanel = new JPanel();
+		autoStopPanel.setLayout(new BoxLayout(autoStopPanel, BoxLayout.Y_AXIS));
+		autoStopPanel.setBorder(BorderFactory.createTitledBorder("auto stop slots"));
+
+		autoStopLabel = new JLabel();
+		autoStopLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		JPanel autoStopLabelPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		autoStopLabelPanel.add(autoStopLabel);
+		autoStopPanel.add(autoStopLabelPanel);
+		updateAutoStopLabel();
+
+		JPanel inputPanel = new JPanel();
+		inputPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		inputPanel.add(new JLabel("Start (HH:MM):"));
+		startField = new JTextField(5);
+		inputPanel.add(startField);
+		inputPanel.add(new JLabel("End (HH:MM):"));
+		endField = new JTextField(5);
+		inputPanel.add(endField);
+		addSlotButton = new JButton("Add");
+		addSlotButton.setActionCommand(ADD_SLOT);
+		addSlotButton.addActionListener(this);
+		inputPanel.add(addSlotButton);
+		clearSlotsButton = new JButton("Clear");
+		clearSlotsButton.setActionCommand(CLEAR_SLOTS);
+		clearSlotsButton.addActionListener(this);
+		inputPanel.add(clearSlotsButton);
+		autoStopPanel.add(inputPanel);
 
 		//////////////////////////////////////////////
 		//Create The iteration of the agent slider
@@ -136,9 +188,12 @@ public class Swing extends JPanel implements ActionListener{
 		buttonPanel.add(playButton);
 
 
+
+
 		//////////////////////////////////////////////
 		//Put all the panel togheter
-		//////////////////////////////////////////////	
+		//////////////////////////////////////////////
+		add(autoStopPanel);
 		add(sleepTimePanel);
 		add(mouseMovePanel);				
 		add(buttonPanel);
@@ -149,19 +204,68 @@ public class Swing extends JPanel implements ActionListener{
 
 
 	public void actionPerformed(ActionEvent evt) {
-		if (evt.getActionCommand() == PLAY) {
-			dataBug.setPause(false);
+		String cmd = evt.getActionCommand();
+		if (PLAY.equals(cmd)) {
+			dataBug.setPauseManual(false);
 			playButton.setEnabled(false);
 			pauseButton.setEnabled(true);
-		}else if (evt.getActionCommand() == PAUSE) {
-			dataBug.setPause(true);
+
+		} else if (PAUSE.equals(cmd)) {
+			dataBug.setPauseManual(true);
 			playButton.setEnabled(true);
 			pauseButton.setEnabled(false);
+
+		} else if (ADD_SLOT.equals(cmd)) {
+			String startStr = startField.getText().trim();
+			String endStr = endField.getText().trim();
+			DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm");
+			LocalTime start, end;
+			try {
+				start = LocalTime.parse(startStr, fmt);
+				end = LocalTime.parse(endStr, fmt);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, "Invalid time format. Use HH:MM.", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			if (!start.isBefore(end)) {
+				JOptionPane.showMessageDialog(this, "Invalid slot: start must be before end.", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			TimeSlot newSlot = new TimeSlot(start, end);
+			List<TimeSlot> slots = new ArrayList<>(dataBug.getAutoStopSlots());
+			for (TimeSlot slot : slots) {
+				if (overlaps(newSlot, slot)) {
+					JOptionPane.showMessageDialog(this, "Invalid slot: overlaps an existing slot.", "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+			slots.add(newSlot);
+			slots.sort(null);
+			dataBug.setAutoStopSlots(slots);
+			updateAutoStopLabel();
+			startField.setText("");
+			endField.setText("");
+
+		} else if (CLEAR_SLOTS.equals(cmd)) {
+			dataBug.setAutoStopSlots(Collections.emptyList());
+			updateAutoStopLabel();
 		}
-
-
-
 	}
 
-
+	private void updateAutoStopLabel() {
+        List<TimeSlot> slots = dataBug.getAutoStopSlots();
+        if (slots.isEmpty()) {
+            autoStopLabel.setText("configured slots: (none)");
+        } else {
+            StringBuilder sb = new StringBuilder("configured slots: ");
+            for (int i = 0; i < slots.size(); i++) {
+                if (i > 0) sb.append(", ");
+                sb.append(slots.get(i).toString());
+            }
+            autoStopLabel.setText(sb.toString());
+        }
+    }
+    private boolean overlaps(TimeSlot a, TimeSlot b) {
+        return a.getStart().isBefore(b.getEnd()) && b.getStart().isBefore(a.getEnd());
+    }
 }

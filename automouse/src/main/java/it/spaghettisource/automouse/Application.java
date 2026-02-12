@@ -19,26 +19,44 @@ import it.spaghettisource.automouse.utils.Configuration;
 import it.spaghettisource.automouse.utils.ImageIconFactory;
 
 /**
- * Main class to start the application
- * 
- * @author alesky
+ * Main class to start the AutoMouse application. Handles initialization, configuration,
+ * and selection of the user interface mode (console or Swing GUI).
+ * <p>
+ * Usage: java -jar automouse.jar [console|swing]
+ * </p>
  *
+ * <ul>
+ *   <li>console - starts the application in command-line mode</li>
+ *   <li>swing   - starts the application with a graphical user interface</li>
+ * </ul>
+ *
+ * The application initializes configuration, sets up the agent, and starts the selected UI.
+ *
+ * @author alesky
  */
 public class Application {
 
 	static Log log = LogFactory.getLog(Application.class.getName());
 
-	private static DataBug dataBug;
-	
+    /**
+     * Shared DataBug instance used by the agent and UI components.
+     */
+    private static DataBug dataBug;
+
+    /**
+     * Main entry point for the AutoMouse application.
+     *
+     * @param args Command-line arguments. The first argument must be either "console" or "swing".
+     */
     public static void main(String[] args) {
 	
 		//configure the application
     	Configuration.init();
-		dataBug = new DataBug(Configuration.getDefaultSleepTime(), Configuration.getDefaultPixelMove());
+		dataBug = new DataBug(Configuration.getDefaultSleepTime(), Configuration.getDefaultPixelMove(), Configuration.getAutoStopSlots());
 		
 		//prepare the agent
-		Agent automa = new Agent(dataBug);
-		Thread tha = new Thread(automa);
+		Agent agent = new Agent(dataBug);
+		Thread thread = new Thread(agent);
 
 		
 		if(args.length == 0 ){
@@ -73,12 +91,17 @@ public class Application {
 		}		
 		
 		//start the agent
-		tha.start();
+		thread.start();
 		log.info("application started succesfully");
 		
 	}
 	
 	
+	/**
+	 * Starts the command-line interface for the application.
+	 *
+	 * @param dataBug The DataBug instance to be used by the console.
+	 */
 	private static void startCommandLine(DataBug dataBug){
 		//start the console
 		Console console = new Console(dataBug);
@@ -87,6 +110,11 @@ public class Application {
 	}
 	
 	
+	/**
+	 * Creates and displays the Swing GUI for the application.
+	 *
+	 * @param dataBug The DataBug instance to be used by the Swing UI.
+	 */
     private static void createAndShowGUI(DataBug dataBug) {
     	log.debug("create frame");
 

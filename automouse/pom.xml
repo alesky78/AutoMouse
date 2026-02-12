@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.spaghettisource.automouse</groupId>
 	<artifactId>automouse</artifactId>
-	<version>1.1.0</version>
+	<version>1.2.0</version>
 
 	<licenses>
 		<license>
@@ -16,13 +16,11 @@
 	<developers>
 		<developer>
 			<id>alesky</id>
-			<name>Alessndro D'Ottavio</name>
-			<email>alessandro.dottavio@gmail.com</email>
+			<name>Alessandro</name>
 			<roles>
 				<role>architect</role>
 				<role>developer</role>
 			</roles>
-			<timezone>Bruxelles</timezone>
 		</developer>
 	</developers>
 
@@ -40,6 +38,7 @@
 	</dependencies>
 
 	<build>
+
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -51,6 +50,7 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 			</plugin>
 		</plugins>
+
 		<pluginManagement>
 			<plugins>
 				<plugin>

@@ -10,7 +10,7 @@
 	</formats>
 
 
-	<!-- COPY DEPENDENCES -->
+	<!-- COPY DEPENDENCIES -->
 	<dependencySets>
 		<dependencySet>
 			<useProjectArtifact>false</useProjectArtifact>
